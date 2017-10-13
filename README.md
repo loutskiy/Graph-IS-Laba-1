@@ -1,6 +1,10 @@
 # Graph-IS-Laba-1
 Данный проект является первой лабораторной работой по интеллектуальным системам МГТУ "Станкин", написанный на Objective-C языке.
 
+# Disclaimer
+This software is published for academic and non-commercial use only.
+
+
 To use the Graf library, copy the Graph and Graph files to your project. The graph is represented as an adjacent matrix [0, 1]. Below is an example of using a library:
 ```objc
 NSArray *grafData = @[
