@@ -30,6 +30,18 @@
 }
 
 /**
+ Метод запускает обход строк для построения openClosed
+ */
+- (void) openClosedSearch {
+    for (NSInteger i = 0; i < self.array2d.count; i++) {
+        GrafRow *row = [[GrafRow alloc] initGrafRowFromArray:self.array2d andIndex:i];
+        [self workWithRow:row];
+        [self.Xs addObject:@(i+1)];
+        if (i+1 == self.endPointOfSearch) break;
+    }
+}
+
+/**
  Метод находит open и closed для каждой строчки
 
  @param row строка из матрицы смежности
@@ -107,11 +119,7 @@
 }
 
 - (void) runSearch {
-    for (NSInteger i = 0; i < self.array2d.count; i++) {
-        GrafRow *row = [[GrafRow alloc] initGrafRowFromArray:self.array2d andIndex:i];
-        [self workWithRow:row];
-        [self.Xs addObject:@(i+1)];
-    }
+    [self openClosedSearch];
     [self searchAllPaths];
     self.indexOfShortPath = [self searchShortPathToVertex];
 }
