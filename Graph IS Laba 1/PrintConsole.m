@@ -10,16 +10,14 @@
 
 @implementation PrintConsole
 
-+ (void)showOpen:(NSArray *)open andClosedArray:(NSArray *)closed withXs:(NSArray *)Xs {
-    if (open.count == closed.count && open.count == Xs.count) {
-        IFPrint(@"\n|-------|-----|--------|----------|\n|  Шаг  |  X  |  Open  |  Closed  |\n|-------|-----|--------|----------|\n");
-        for (NSInteger i = 0; i < open.count; i++) {
-            IFPrint(@"|   %ld   |  %@  |  %@  |  %@  |\n|-------|-----|--------|----------|\n", i+1, [Xs objectAtIndex:i], [[open objectAtIndex:i] componentsJoinedByString:@","], [[closed objectAtIndex:i] componentsJoinedByString:@","]);
-        }
-        IFPrint(@"\n");
-    } else {
-        IFPrint(@"/**************/\nERROR COUNTS\n");
++ (void)showOpenClosedTable:(NSArray<GrafTableRow> *)grafTable {
+    IFPrint(@"\n|-------|-----|--------|----------|\n|  Шаг  |  X  |  Open  |  Closed  |\n|-------|-----|--------|----------|\n");
+    NSInteger i = 0;
+    for (GrafTableRow *gtr in grafTable) {
+        IFPrint(@"|   %ld   |  %ld  |  %@  |  %@  |\n|-------|-----|--------|----------|\n", i+1, gtr.X, [gtr.open componentsJoinedByString:@","], [gtr.closed componentsJoinedByString:@","]);
+        i++;
     }
+    IFPrint(@"\n");
 }
 
 + (void)showType:(TypeOfSearch)type {

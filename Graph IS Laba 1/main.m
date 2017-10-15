@@ -23,11 +23,11 @@ int main(int argc, const char * argv[]) {
                               @[@(0), @(0), @(1), @(0), @(0), @(1), @(1)], //7
                               ];
         Graf *graf = [[Graf alloc] initWithGrafForArray:grafData];
-        graf.type = widthType;
+        graf.type = depthType;
         graf.endPointOfSearch = 7;
         [graf runSearch];
         [PrintConsole showType:graf.type];
-        [PrintConsole showOpen:graf.openArray andClosedArray:graf.closedArray withXs:graf.Xs];
+        [PrintConsole showOpenClosedTable:graf.grafTable];
         @try {
             [PrintConsole showShortPath:[graf.paths objectAtIndex:graf.indexOfShortPath] toVertex:graf.endPointOfSearch];
         } @catch (NSException *exc) {

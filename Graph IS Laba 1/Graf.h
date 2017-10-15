@@ -7,6 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "GrafRow.h"
+#import "GrafTableRow.h"
+#import "GrafHelper.h"
 
 /**
  Определение типа TypeOfSearch для создания треггера по вариантам поиска
@@ -15,7 +18,7 @@
  - depthType: Поиск в глубину
  */
 typedef NS_ENUM(NSInteger,TypeOfSearch) {
-    widthType = 1,
+    widthType = 0,
     depthType
 };
 
@@ -53,16 +56,6 @@ typedef NS_ENUM(NSInteger,TypeOfSearch) {
 @property (nonatomic) TypeOfSearch type;
 
 /**
- Open массив (мутабельный)
- */
-@property (nonatomic) NSMutableArray *openArray;
-
-/**
- Closed массив (мутабельный)
- */
-@property (nonatomic) NSMutableArray *closedArray;
-
-/**
  Массив всех возможных путей до любой точки графа
  */
 @property (nonatomic) NSMutableArray *paths;
@@ -76,5 +69,10 @@ typedef NS_ENUM(NSInteger,TypeOfSearch) {
  Мутабельный массив всех иксов
  */
 @property (nonatomic) NSMutableArray *Xs;
+
+/**
+ Мутабельный массив объектов GrafTableRow
+ */
+@property (nonatomic) NSMutableArray <GrafTableRow>*grafTable;
 
 @end

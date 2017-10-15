@@ -7,10 +7,10 @@
 //
 
 #import "Graf.h"
-#import "GrafRow.h"
 
 @interface Graf () {
     NSMutableArray *pathTemp; // Мутабельный массив временных путей
+    BOOL equalsFound;
 }
 
 @end
@@ -21,10 +21,8 @@
     self = [super init];
     if (self) {
         self.array2d = array;
-        self.openArray = [NSMutableArray new];
-        self.closedArray = [NSMutableArray new];
         self.paths = [NSMutableArray new];
-        self.Xs = [NSMutableArray new];
+        self.grafTable = [NSMutableArray<GrafTableRow> new];
     }
     return self;
 }
@@ -33,11 +31,89 @@
  Метод запускает обход строк для построения openClosed
  */
 - (void) openClosedSearch {
-    for (NSInteger i = 0; i < self.array2d.count; i++) {
-        GrafRow *row = [[GrafRow alloc] initGrafRowFromArray:self.array2d andIndex:i];
-        [self workWithRow:row];
-        [self.Xs addObject:@(i+1)];
-        if (i+1 == self.endPointOfSearch) break;
+    switch (self.type) {
+        case widthType:
+            for (NSInteger i = 0; i < self.array2d.count; i++) {
+                GrafRow *row = [[GrafRow alloc] initGrafRowFromArray:self.array2d andIndex:i];
+                [self workWithRow:row];
+                if (i+1 == self.endPointOfSearch) break;
+            }
+            break;
+        case depthType:
+            {
+                GrafRow *row = [[GrafRow alloc] initGrafRowFromArray:self.array2d andIndex:0];
+                [self workWithDepthRow:row];
+            }
+            break;
+    }
+}
+
+/**
+ Функция для нахождения open/closed при depthType
+ Внимание! Функция написано с адским говнокодом. Нужен рефакторинг
+
+ @param row строка из матрицы смежности
+ */
+- (void) workWithDepthRow:(GrafRow*)row {
+    GrafTableRow *lastGtr = [self.grafTable lastObject];
+    NSMutableArray *temporaryRowArrayOpen = (row.indexOfRow > 0) ? [NSMutableArray arrayWithArray:lastGtr.open] : [NSMutableArray new];
+    NSMutableArray *temporaryRowArrayClosed = (row.indexOfRow > 0) ? [NSMutableArray arrayWithArray:lastGtr.closed] : [NSMutableArray new];
+    if ([temporaryRowArrayOpen containsObject:@(row.indexOfRow+1)]) {
+        [temporaryRowArrayOpen removeObject:@(row.indexOfRow+1)];
+    }
+    for (NSInteger i = 0; i < row.row.count; i++) {
+        BOOL item = [[row.row objectAtIndex:i] boolValue];
+        if (item && i != row.indexOfRow) {
+            if (![temporaryRowArrayClosed containsObject:@(i+1)] && ![temporaryRowArrayOpen containsObject:@(i+1)]) [temporaryRowArrayOpen addObject:@(i+1)];
+        }
+    }
+    if (row.indexOfRow == 0) {
+        if ([[row.row firstObject] boolValue]) {
+            if (![GrafHelper isContainXValue:1 inGrafTable:self.grafTable]) {
+                [temporaryRowArrayClosed addObject:@(row.indexOfRow+1)];
+                NSLog(@"X %d", 1); // На этом этапе внести иксы, но проверять их на наличие в closed. В случае, если x == self.endPointOfSearch - остановить обход
+                GrafTableRow *gtr = [GrafTableRow new];
+                gtr.X = 1;
+                gtr.closed = temporaryRowArrayClosed;
+                gtr.open = temporaryRowArrayOpen;
+                [self.grafTable addObject:gtr];
+            }
+        }
+        if (self.endPointOfSearch == 1) return;
+    }
+    for (NSInteger i = row.indexOfRow + 1; i < row.row.count; i++) {
+        if ([[row.row objectAtIndex:i] boolValue]) {
+            if (![GrafHelper isContainXValue:i+1 inGrafTable:self.grafTable]) {
+                lastGtr = [self.grafTable lastObject];
+                temporaryRowArrayOpen = [NSMutableArray arrayWithArray:lastGtr.open];
+                if ([temporaryRowArrayOpen containsObject:@(i+1)]) {
+                    [temporaryRowArrayOpen removeObject:@(i+1)];
+                }
+                temporaryRowArrayClosed = [NSMutableArray arrayWithArray:lastGtr.closed];
+                NSInteger k = 0;
+                for (NSInteger j = i+1; j < row.row.count; j++) {
+                    GrafRow *rowS = [[GrafRow alloc] initGrafRowFromArray:self.array2d andIndex:i];
+                    if ([[rowS.row objectAtIndex:j] boolValue]){
+                        if (![temporaryRowArrayClosed containsObject:@(j+1)] && ![temporaryRowArrayOpen containsObject:@(j+1)]) {
+                            [temporaryRowArrayOpen insertObject:@(j+1) atIndex:k];
+                            k++;
+                        }
+                    }
+                }
+                [temporaryRowArrayClosed addObject:@(i+1)];
+                NSLog(@"X %ld", i+1); // На этом этапе внести иксы, но проверять их на наличие в closed. В случае, если x == self.endPointOfSearch - остановить обход
+                GrafTableRow *gtr = [GrafTableRow new];
+                gtr.X = i+1;
+                gtr.closed = temporaryRowArrayClosed;
+                gtr.open = temporaryRowArrayOpen;
+                [self.grafTable addObject:gtr];
+            }
+            if (i+1 == self.endPointOfSearch) {
+                NSLog(@"совпадение найдено");
+                return;};
+            GrafRow *row = [[GrafRow alloc] initGrafRowFromArray:self.array2d andIndex:i];
+            [self workWithDepthRow:row];
+        }
     }
 }
 
@@ -47,8 +123,9 @@
  @param row строка из матрицы смежности
  */
 - (void) workWithRow:(GrafRow*) row {
-    NSMutableArray *temporaryRowArrayOpen = (row.indexOfRow > 0) ? [NSMutableArray arrayWithArray:[self.openArray objectAtIndex:row.indexOfRow-1]] : [NSMutableArray new];
-    NSMutableArray *temporaryRowArrayClosed = (row.indexOfRow > 0) ? [NSMutableArray arrayWithArray:[self.closedArray objectAtIndex:row.indexOfRow-1]] : [NSMutableArray new];
+    GrafTableRow *lastGtr = [self.grafTable lastObject];
+    NSMutableArray *temporaryRowArrayOpen = (row.indexOfRow > 0) ? [NSMutableArray arrayWithArray:lastGtr.open] : [NSMutableArray new];
+    NSMutableArray *temporaryRowArrayClosed = (row.indexOfRow > 0) ? [NSMutableArray arrayWithArray:lastGtr.closed] : [NSMutableArray new];
     if ([temporaryRowArrayOpen containsObject:@(row.indexOfRow+1)]) {
         [temporaryRowArrayOpen removeObject:@(row.indexOfRow+1)];
     }
@@ -59,8 +136,11 @@
         }
     }
     [temporaryRowArrayClosed addObject:@(row.indexOfRow+1)];
-    [self.openArray addObject:temporaryRowArrayOpen];
-    [self.closedArray addObject:temporaryRowArrayClosed];
+    GrafTableRow *gtr = [[GrafTableRow alloc] init];
+    gtr.open = temporaryRowArrayOpen;
+    gtr.closed = temporaryRowArrayClosed;
+    gtr.X = row.indexOfRow+1;
+    [self.grafTable addObject:gtr];
 }
 
 /**
@@ -109,9 +189,14 @@
     NSInteger countLast = 0;
     for (NSArray *path in self.paths) {
         if ([path containsObject:@(self.endPointOfSearch)]) {
-            if (path.count < countLast || countLast == 0) {
+            if (self.type == widthType) {
+                if (path.count < countLast || countLast == 0) {
+                    indexPath = [self.paths indexOfObject:path];
+                    countLast = path.count;
+                }
+            } else {
                 indexPath = [self.paths indexOfObject:path];
-                countLast = path.count;
+                break;
             }
         }
     }
@@ -119,6 +204,7 @@
 }
 
 - (void) runSearch {
+    equalsFound = false;
     [self openClosedSearch];
     [self searchAllPaths];
     self.indexOfShortPath = [self searchShortPathToVertex];

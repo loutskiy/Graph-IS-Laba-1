@@ -17,11 +17,9 @@
 /**
  Метод выводит в консоль таблицу с X, open и closed значениями
 
- @param open массив open
- @param closed массив closed
- @param Xs массив иксов
+ @param grafTable массив объектов GrafTableRow
  */
-+ (void) showOpen:(NSArray*)open andClosedArray:(NSArray*)closed withXs:(NSArray*)Xs;
++ (void) showOpenClosedTable:(NSArray<GrafTableRow>*)grafTable;
 
 /**
  Метод выводит в консоль применяемый тип поиска

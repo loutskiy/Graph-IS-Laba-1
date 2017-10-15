@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		53507CC81F9133B900D82DBE /* PrintConsole.m in Sources */ = {isa = PBXBuildFile; fileRef = 53507CC71F9133B900D82DBE /* PrintConsole.m */; };
+		53507CCB1F93A29100D82DBE /* GrafTableRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 53507CCA1F93A29100D82DBE /* GrafTableRow.m */; };
+		53507CCE1F93B90B00D82DBE /* GrafHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 53507CCD1F93B90B00D82DBE /* GrafHelper.m */; };
 		5379B27F1F8B4D6400F6F72E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379B27E1F8B4D6400F6F72E /* main.m */; };
 		5379B2871F8B4D8300F6F72E /* Graf.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379B2861F8B4D8300F6F72E /* Graf.m */; };
 		5379B2AC1F8B582900F6F72E /* GrafRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379B2AB1F8B582900F6F72E /* GrafRow.m */; };
@@ -28,6 +30,10 @@
 /* Begin PBXFileReference section */
 		53507CC61F9133B900D82DBE /* PrintConsole.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrintConsole.h; sourceTree = "<group>"; };
 		53507CC71F9133B900D82DBE /* PrintConsole.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrintConsole.m; sourceTree = "<group>"; };
+		53507CC91F93A29100D82DBE /* GrafTableRow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GrafTableRow.h; sourceTree = "<group>"; };
+		53507CCA1F93A29100D82DBE /* GrafTableRow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GrafTableRow.m; sourceTree = "<group>"; };
+		53507CCC1F93B90B00D82DBE /* GrafHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GrafHelper.h; sourceTree = "<group>"; };
+		53507CCD1F93B90B00D82DBE /* GrafHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GrafHelper.m; sourceTree = "<group>"; };
 		5379B27B1F8B4D6400F6F72E /* Graph IS Laba 1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Graph IS Laba 1"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5379B27E1F8B4D6400F6F72E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5379B2851F8B4D8300F6F72E /* Graf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Graf.h; sourceTree = "<group>"; };
@@ -73,6 +79,10 @@
 				5379B2861F8B4D8300F6F72E /* Graf.m */,
 				5379B2AA1F8B582900F6F72E /* GrafRow.h */,
 				5379B2AB1F8B582900F6F72E /* GrafRow.m */,
+				53507CC91F93A29100D82DBE /* GrafTableRow.h */,
+				53507CCA1F93A29100D82DBE /* GrafTableRow.m */,
+				53507CCC1F93B90B00D82DBE /* GrafHelper.h */,
+				53507CCD1F93B90B00D82DBE /* GrafHelper.m */,
 			);
 			path = "Graph IS Laba 1";
 			sourceTree = "<group>";
@@ -134,10 +144,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53507CCB1F93A29100D82DBE /* GrafTableRow.m in Sources */,
 				5379B27F1F8B4D6400F6F72E /* main.m in Sources */,
 				53507CC81F9133B900D82DBE /* PrintConsole.m in Sources */,
 				5379B2AC1F8B582900F6F72E /* GrafRow.m in Sources */,
 				5379B2871F8B4D8300F6F72E /* Graf.m in Sources */,
+				53507CCE1F93B90B00D82DBE /* GrafHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
